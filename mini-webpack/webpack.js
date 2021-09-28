@@ -3,10 +3,24 @@ const path = require("path");
 const parser = require("@babel/parser");
 const traverse = require("@babel/traverse").default;
 const babel = require("@babel/core");
+const uglifyJS = require("uglify-js");
 
 function getModuleInfo(file) {
   const body = fs.readFileSync(file, "utf-8");
-  const ast = parser.parse(body, {
+
+  console.log("body", body);
+  //在babel编译前tree-shaking  
+  //后果:引入的包很多都是bable编译后的，就没有对引入的包tree-shaking 而实际项目中引入的包占大头
+  //解决:生成依赖前，对code进行标记哪些是used，哪些没有ues,再考虑删除
+  const res = uglifyJS.minify(body, {
+    compress: {
+      dead_code: true,
+    },
+  });
+
+  console.log("res", res);
+
+  const ast = parser.parse(res.code, {
     sourceType: "module",
   });
 
