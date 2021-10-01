@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    //bind实现 简单版
+    Function.prototype.bind = function (context) {
+        let self = this
+        return function () {
+            self.apply(context)  //书上是 return self.apply(context, arguments) 
+        }
+    }
+    var obj = {
+        name: 'seveb'
+    }
+
+    var func = function () {
+        alert(this.name)
+    }.bind(obj)
+    func()
+
+    //进阶实现 可以往func函数中添加参数
+    //获取到bind和函数本身传的参数 合成一个数组，最后在apply中传入
+    Function.prototype._bind = function(){
+        let self = this,
+        context = [].shift.call(arguments), //获取要绑定的this
+        args = [].slice.call(arguments) //转数组
+        return function(){
+            return self.apply(context,[].concat(args,[].slice.call(arguments)))
+        }
+    }
+    var obj = {
+        name:'ly'
+    }
+   
+    var func = function(a,b,c,d){
+        console.log(this.name);
+        console.log(a,b,c,d);
+    }._bind(obj,1,2,3)(4)
+
+</script>
+
+</html>
