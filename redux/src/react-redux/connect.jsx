@@ -6,7 +6,6 @@ import { Context } from './provider.jsx'
 import { useState, useEffect } from 'react';
 import { useContext } from 'react';
 export default function connect(mapState, mapDispatch) {
-
     return function func(Component) {
         function Factory() {
             let store = useContext(Context)

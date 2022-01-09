@@ -5,98 +5,170 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图片懒加载</title>
+    <title>Document</title>
 </head>
 <style>
-    .imgUnitContainer {
-        height: 300px;
-        /* 固定一个高度 */
-        width: 500px;
-        /* 固定一个宽度 */
-        overflow: hidden;
-        /* 图片超出容器则隐藏 */
-        border: 1px solid #eee;
-        /* 边框 */
-        margin: 10px;
-        /* 外边距 */
+    .Container {
         display: flex;
-        /* 弹性布局 此处主要目的为使图片居中 */
-        align-items: center;
-        /* 垂直居中 */
-        justify-content: center;
-        /* 水平居中 */
+        justify-content: space-around;
+    }
+
+    .leftColumn,
+    .rightColumn {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
     }
 </style>
 
 <body>
-    <div id="container"></div>
+    <div class="Container">
+        <div class="leftColumn"></div>
+        <div class="rightColumn"></div>
+    </div>
 </body>
+<!-- https://we.cqupt.edu.cn/lostFound/api/lost/file -->
 <script>
-    //https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg
-    var imgNodeList = [];
-    (function () {
-        var imgUrlArr = [
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "http://icknsd.cn/lanshan/grid.png",
-            "http://icknsd.cn/lanshan/todolist.gif",
-            "http://icknsd.cn/lanshanimage/one.jpg",
-            "http://icknsd.cn/ljfl/blue_ljt.png",
-            "http://icknsd.cn/losePic.png",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "http://icknsd.cn/other_lose.png",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-            "https://img.alicdn.com/imgextra/i3/6000000006081/O1CN01DJMY4C1un9Bc41Msv_!!6000000006081-0-octopus.jpg",
-        ]
-        var innerContainer = document.createElement("div")
-        imgUrlArr.forEach(v => {
-            var imgUnitContainer = document.createElement("div")
-            imgUnitContainer.className = "imgUnitContainer"
-            var img = new Image()
-            img.src = "https://cdn.jsdelivr.net/gh/sentsin/layui@15d7241/dist/css/modules/layer/default/loading-2.gif"
-            img.setAttribute("data-src", v)
-            img.setAttribute("loaded", "no")
-            imgNodeList.push(img)
-            imgUnitContainer.appendChild(img)
-            innerContainer.appendChild(imgUnitContainer)
+    //基于瀑布流布局的图片列表页面  通过图片懒加载和dp算法优化
+    //懒加载是基于IntersectionObserver实现
+    //还有一种方法来判断元素是否进入视图    当 offsetTop < clientHeight + scrollTop的时候元素进入浏览器视窗
+    const promise = getImgSrc("https://we.cqupt.edu.cn/lostFound/api/lost/file")
+    // document.addEventListener('scroll',lazyLoad)
+    promise.then(value => {
+        let [rightColumn, leftColumn] = getImgData(value)
+        preLoadImg(rightColumn, leftColumn)
+        //方法二
+        // lazyLoad()
+        // 方法一
+        let observer = new IntersectionObserver((entries, observe) => {
+            entries.forEach(item => {
+                if(item.isIntersecting){
+                    let url = item.target.getAttribute('data-src')
+                    item.target.removeAttribute('data-src')
+                    item.target.setAttribute('src',url)
+                    observer.unobserve(item.target)
+                }
+            })
         })
-        document.getElementById("container").appendChild(innerContainer)
-    })()
-    function lazyLoad() {
-        var height = window.innerHeight //可视区域高度
-        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-        imgNodeList.forEach(v => {
-            if (v.getAttribute("loaded") === 'yes') return
-            if ((height + scrollTop) > v.offsetTop) {
-                v.setAttribute("loaded", "yes")
-                // v.src = v.getAttribute("data-src")
-                var tmp = new Image()
-                tmp.src = v.getAttribute("data-src")
-                tmp.onload = function () {
-                    v.src = v.getAttribute("data-src")
+        const imgsDom = document.getElementsByTagName('img')
+        Array.from(imgsDom).forEach((value) => {
+            observer.observe(value)
+        })
+        
+     
+    })
+    //方法二
+    // function lazyLoad(){
+    //     const imgsDom = document.getElementsByTagName('img')
+    //     console.log("imgsDom",imgsDom);
+    //     Array.from(imgsDom).forEach(item=>{
+    //         if(item.offsetTop <= document.documentElement.clientHeight+document.documentElement.scrollTop){
+    //             let url = item.getAttribute('data-src')
+    //             item.setAttribute("src",url)
+    //         }
+    //     })
+    // }
+
+    function preLoadImg(rightColumn, leftColumn) {
+        const leftDom = document.getElementsByClassName('leftColumn')[0]
+        const rightDom = document.getElementsByClassName('rightColumn')[0]
+
+        rightColumn.forEach((value) => {
+            let img = new Image
+            img.style.height = value.height + 'px'
+            img.style.width = value.width + 'px'
+            img.style.backgroundColor = '#ccc'
+            img.style.marginTop = '10px'
+            img.setAttribute('data-src',value.url)
+            rightDom.appendChild(img)
+        })
+        leftColumn.forEach((value) => {
+            let img = new Image
+            img.style.height = value.height + 'px'
+            img.style.width = value.width + 'px'
+            img.style.backgroundColor = '#ccc'
+            img.style.marginTop = '10px'
+            img.setAttribute('data-src',value.url)
+            leftDom.appendChild(img)
+        })
+
+    }
+
+    function getImgData(value) {
+        let halfHeight = Math.floor(getTotalHeight(value) / 2)
+        let leftArr = [], rightArr = [], dp = [], imgArr = value
+        //初始化
+        // let dp = Array.from({ length: imgArr.length + 1 }).map((value, index) => {
+        //     return Array(halfHeight + 1).fill(0)
+        // })
+        // console.log(dp);
+        for (let i = 0; i <= imgArr.length; i++) {
+            dp[i] = []
+        }
+        for (let i = 0; i <= halfHeight; i++) {
+            dp.forEach((item) => {
+                item[i] = 0
+            })
+        }
+
+        for (let i = 1; i <= imgArr.length; i++) {
+            for (let j = 0; j <= halfHeight; j++) {  //当高度是J时
+                if (j < imgArr[i - 1].height) {
+                    //如果高度装不下这张图片
+                    dp[i][j] = dp[i - 1][j]
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - imgArr[i - 1].height] + imgArr[i - 1].height)
+                }
+            }
+        }
+        console.log("dp", dp);
+        //寻找具体路径
+        let x = imgArr.length, y = halfHeight
+        for (let i = x; i > 0; i--) {
+            if (dp[i][y] !== dp[i - 1][y]) {
+                leftArr.push(imgArr[i - 1])
+                y -= imgArr[i - 1].height
+            }
+        }
+        //找另一半rightArr
+        for (let j = 0; j < imgArr.length; j++) {
+            if (!leftArr.find((item) => item.url === imgArr[j].url)) {
+                rightArr.push(imgArr[j])
+            }
+        }
+        console.log("rightArr", rightArr);
+        console.log("leftArr", leftArr);
+        return [rightArr, leftArr]
+    }
+
+    function getTotalHeight(imgarr) {
+        let sum = 0
+        imgarr.forEach((item) => {
+            sum += getReallyHeight(item)
+            item.height = getReallyHeight(item)
+            item.width = window.innerWidth * 0.4
+        })
+        return sum
+    }
+    function getReallyHeight(item) {
+        //414*736px
+        //item.height/item.width = height/width
+        width = window.innerWidth * 0.4
+        return Math.floor((item.height / item.width) * width)
+    }
+
+    function getImgSrc(src) {
+        return new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest
+            xhr.open('GET', src)
+            xhr.send()
+            xhr.onreadystatechange = function (e) {
+                if (xhr.readyState === 4) {
+                    let imgsrc = JSON.parse(e.target.response)
+                    resolve(imgsrc.data.image)
                 }
             }
         })
-    }
-
-    window.onscroll = function () {
-        lazyLoad()
-    }
-
-    window.onload = function () {
-        lazyLoad()
     }
 </script>
 

@@ -18,23 +18,18 @@ export const applyMiddleware = function (middlewares) {
             }
             middlewares = [...middlewares]
             const middlewareArr = middlewares.map(middleware => middleware(parmas))
-            let a = compose(...middlewareArr)
-            console.log("a",a);
-            dispatch = a(dispatch)
-            // dispatch = compose(...middlewareArr)(dispatch)
-            console.log("dispatch",dispatch);
+            console.log("middlewareArr", middlewareArr);
+            dispatch = compose(...middlewareArr)(dispatch)
             return { ...store, dispatch }
         }
     }
 }
-
 function compose(...fns) {
     if (fns.length === 0) return arg => arg
     if (fns.length === 1) return fns[0]
-    return fns.reduce((res, cur) => {
-        return (...args) => {
-            return res(cur(...args))
-        }
-    })
-    // return fns.reduce((res, cur) => (...args) => res(cur(...args)))
+    return fns.reduce((pre, cur) => (
+        (...args) => (
+            pre(cur(...args))
+        )
+    ))
 }

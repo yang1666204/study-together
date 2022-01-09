@@ -13,6 +13,8 @@
     <input type="text" id="debounce" placeholder="防抖">
 </body>
 <script>
+    add(10)(12,31,432)(12,24)() //
+    
     //节流
     //规定在单位时间内，时间只能触发一次，如果这个单位时间多次触发函数，只有一次生效
     function ajax(content) {
@@ -20,14 +22,22 @@
     }
 
     function throttle(fn, delay) {
-        let timer;
-        return function (args) {
-            let _args = args
-            clearTimeout(timer)
-            timer = setTimeout(() => {
-                //TODO
-                fn(_args)
-            }, delay)
+        let timer=null;
+        // return function (args) {
+        //     let _args = args
+        //     clearTimeout(timer)
+        //     timer = setTimeout(() => {
+        //         //TODO
+        //         fn(_args)
+        //     }, delay)
+        // }
+        return function(args){
+            if(!timer){
+                timer = setTimeout(()=>{
+                    fn(args)
+                    timer = null
+                },delay)
+            }
         }
     }
     let throttleAjax = throttle(ajax, 1000)
@@ -42,12 +52,16 @@
     function debounce(fn, delay) {
         let timer;
         return function (args) {
-            let _args = args
+            // let _args = args
+            // clearTimeout(timer)
+            // timer = setTimeout(() => {
+            //     ajax(_args)         //ajax.apply(that,_args)?
+            //     timer = null
+            // }, delay)
             clearTimeout(timer)
-            timer = setTimeout(() => {
-                ajax(_args)         //ajax.apply(that,_args)?
-                timer = null
-            }, delay)
+            timer = setTimeout(()=>{
+                fn(args)
+            },delay)
         }
     }
     let ajaxDebounce = debounce(ajax, 1200)
