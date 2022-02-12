@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 基于html5的history 的api pushState和replaceState来修改url但不刷新页面 -->
+    <div class="link">
+        <a href="/historyRouter1"> hashRouter1</a>
+        <a href="/historyRouter2">hashRouter2</a>
+        <a href="/historyRouter3">hashRouter3</a>
+        <button id="btn1">historyRouter1</button>
+        <button id="btn2">historyRouter2</button>
+        <button id="btn3">historyRouter3</button>
+    </div>
+    <div id="container"></div>
+</body>
+<script>
+
+
+
+    //如果url是通过pushState或者replaceState改变的，那么popState的state属性是history.state的副本
+    //history模式下：url改变只能通过 pushState/replaceState 浏览器前进后退 a标签
+    //popstate事件 只有在做出浏览器动作时，才会触发该事件，
+    //如用户点击浏览器的回退按钮（或者在Javascript代码中调用history.back()或者history.forward()方法）
+    class HistoryRouter {
+        constructor() {
+            this.routers = {}
+            this.listenLink()
+            this.listenPopState()
+        }
+
+        listenPopState() {
+            window.addEventListener('popstate', (e) => {
+                let state = e.state || {}, path = state.path || ''
+                this.push(path)
+            })
+        }
+
+        listenLink() {
+            window.addEventListener('click', (e) => {
+                let dom = e.target
+                if (dom.tagName.toUpperCase() === 'A' && dom.getAttribute('href')) {
+                    e.preventDefault()
+                    this.push(dom.getAttribute('href'))
+                }
+            })
+        }
+
+        load() {
+            let path = location.pathname
+            this.push(path)
+        }
+
+        //注册首页
+        registerIndex(callback = () => { }) {
+            this.register['/'] = callback
+        }
+
+        register(router, callback = () => { }) {
+            this.routers[router] = callback
+        }
+
+        push(path) {
+            history.pushState({ path }, null, path)
+            this.routers[path]()
+        }
+
+        replace(path) {
+            history.replaceState({ path }, null, path)
+            this.routers[path]()
+        }
+    }
+
+    let container = document.getElementById('container')
+    let hisRouter = new HistoryRouter
+    hisRouter.registerIndex(() => container.innerHTML = 'I am home')
+    hisRouter.register('/historyRouter1', () => container.innerHTML = 'I am historyRouter1')
+    hisRouter.register('/historyRouter2', () => container.innerHTML = 'I am historyRouter2')
+    hisRouter.register('/historyRouter3', () => container.innerHTML = 'I am historyRouter3')
+    document.getElementById('btn1').addEventListener('click', () => hisRouter.push('/historyRouter1'))
+    document.getElementById('btn2').addEventListener('click', () => hisRouter.replace('/historyRouter2'))
+    document.getElementById('btn3').addEventListener('click', () => hisRouter.push('/historyRouter3'))
+</script>
+
+</html>
