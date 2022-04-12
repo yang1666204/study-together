@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="root"></div>
+    <button onclick="handleTouser()" id="back">to User</button>
+    <button onclick="handleTohome()" id="pushState">to home</button>
+    <button onclick="handleToarticle()">to article</button>
+</body>
+<script src="./index.js"></script>
+<script>
+    let Home = document.createElement("h1")
+    let User = document.createElement("h1")
+    let Article = document.createElement("h1")
+    Home.innerText = "I am home!"
+    User.innerText = "I am user!"
+    Article.innerText = "I am article!"
+
+    let routeConfig = [
+        {
+            path: "/home",
+            element: Home
+        },
+        {
+            path: '/user',
+            element: User,
+        }, {
+            path: '/article',
+            element: Article
+        },
+    ]
+
+
+    // let routeInstance = new HistoryRoute(routeConfig)
+    let routeInstance = new HashRoute(routeConfig)
+    function handleToarticle(){
+        routeInstance.navigate("/article")
+    }
+
+    function handleTohome() {
+        routeInstance.navigate("/home")
+    }
+
+    function handleTouser() {
+        routeInstance.navigate("/user")
+    }
+
+ 
+</script>
+
+</html>

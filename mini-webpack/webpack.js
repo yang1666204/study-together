@@ -19,12 +19,15 @@ function getModuleInfo(file) {
   });
 
   console.log("res", res);
-
+  //parser.parse将字符串转换成ast
   const ast = parser.parse(res.code, {
     sourceType: "module",
   });
 
+  console.log("ast",ast);
+
   const deps = {};
+  //traverse对ast进行遍历  获取依赖路径
   traverse(ast, {
     ImportDeclaration({ node }) {
       const dirname = path.dirname(file);
@@ -33,11 +36,17 @@ function getModuleInfo(file) {
     },
   });
 
+
+  console.log("deps",deps)
+  //将抽象语法树ast转换为code
   const { code } = babel.transformFromAst(ast, null, {
     presets: ["@babel/preset-env"],
   });
 
   const moduleInfo = { file, deps, code };
+
+
+  console.log("moduleInfo",moduleInfo)
   return moduleInfo;
 }
 
@@ -59,6 +68,7 @@ function parseModules(file) {
       code: moduleInfo.code,
     };
   });
+  console.log("depsGraph",depsGraph)
   return depsGraph;
 }
 
