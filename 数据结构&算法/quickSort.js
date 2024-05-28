@@ -1,3 +1,4 @@
+// 快排
 function findPovit(arr, left, right) {
     if (right - left > 3) {
         const center = Math.ceil((left + right) / 2);
