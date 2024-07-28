@@ -1,20 +1,12 @@
-import { intl } from "@/utils/intl"
-import Image from "next/image"
+import Image from "next/image";
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          {intl.formatMessage({
-            id: "a63d37",
-            defaultMessage: "Get started by editing",
-          })}
-          <code className="font-mono font-bold">
-            {intl.formatMessage({
-              id: "73a7a4",
-              defaultMessage: "src/app/page.js",
-            })}
-          </code>
+          Get started by editing&nbsp;
+          <code className="font-mono font-bold">src/app/page.js</code>
         </p>
         <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
           <a
@@ -23,10 +15,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            {intl.formatMessage({
-              id: "7f3e04",
-              defaultMessage: "By",
-            })}{" "}
+            By{" "}
             <Image
               src="/vercel.svg"
               alt="Vercel Logo"
@@ -58,23 +47,13 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            {intl.formatMessage({
-              id: "8239cc",
-              defaultMessage: "Docs",
-            })}{" "}
+            Docs{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              {intl.formatMessage({
-                id: "f4b91e",
-                defaultMessage: "->",
-              })}
+              -&gt;
             </span>
           </h2>
           <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            {intl.formatMessage({
-              id: "a33aea",
-              defaultMessage:
-                "Find in-depth information about Next.js features and API.",
-            })}
+            查找有关 Next.js 功能和 API 的详细信息。
           </p>
         </a>
 
@@ -85,23 +64,13 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            {intl.formatMessage({
-              id: "ba0573",
-              defaultMessage: "Learn",
-            })}{" "}
+            Learn{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              {intl.formatMessage({
-                id: "dda6ba",
-                defaultMessage: "->",
-              })}
+              -&gt;
             </span>
           </h2>
           <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            {intl.formatMessage({
-              id: "c5682f",
-              defaultMessage:
-                "Learn about Next.js in an interactive course with quizzes!",
-            })}
+            通过带有测验的交互式课程了解 Next.js！
           </p>
         </a>
 
@@ -112,22 +81,13 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            {intl.formatMessage({
-              id: "0fb9fe",
-              defaultMessage: "Templates",
-            })}{" "}
+            Templates{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              {intl.formatMessage({
-                id: "c59f11",
-                defaultMessage: "->",
-              })}
+              -&gt;
             </span>
           </h2>
           <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            {intl.formatMessage({
-              id: "452493",
-              defaultMessage: "Explore starter templates for Next.js.",
-            })}
+            探索 Next.js 的入门模板。
           </p>
         </a>
 
@@ -138,26 +98,16 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            {intl.formatMessage({
-              id: "7a6ccd",
-              defaultMessage: "Deploy",
-            })}{" "}
+            Deploy{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              {intl.formatMessage({
-                id: "3dc77f",
-                defaultMessage: "->",
-              })}
+              -&gt;
             </span>
           </h2>
           <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            {intl.formatMessage({
-              id: "f0ee36",
-              defaultMessage:
-                "Instantly deploy your Next.js site to a shareable URL with Vercel.",
-            })}
+            立即使用 Vercel 将您的 Next.js 网站部署到可共享的 URL。
           </p>
         </a>
       </div>
     </main>
-  )
+  );
 }
