@@ -6,7 +6,7 @@
 
 项目中我们使用 ES6+ 的各种新语法、新特性：比如箭头函数，async await，但是用户实际使用的浏览器版本可能并不支持这些语法。
 
-![image-20240903224817734](/Users/liyang/Library/Application Support/typora-user-images/image-20240903224817734.png)
+![image-20240903224817734](../images/image-20240903224817734.png)
 
  当用户使用的浏览器版本小于图中对应的版本就没办法正常运行我们的代码，所以我们需要一个工具能够让我们在开发环境中使用最新的语法并且部署到生产环境中时能够把代码编译成低版本浏览器也能识别的语法。Babel 就是这样一个工具，并且 Babel 还能做很多事，它是一个工具链，里面包含了多个软件包，它提供了一种能让我们对源码进行静态分析（指在不需要执行代码的前提下对代码进行分析以及相应处理的一个过程，主要应用于语法检查、编译、代码高亮等）或者做一些特定转换的能力。京东的小程序框架 taro，用 react 的语法写小程序，最后还能运用到多个平台，微信小程序抖音小程序等。本质上就是基于 Babel 的 api 实现的，分析源码->转换到对应的语法。
 
@@ -101,7 +101,7 @@ import "core-js/stable";
 
 编写插件之前得先知道插件是如何工作的，Babel 的转译过程主要分为三步：解析、转换、生成。而插件主要是作用于第二步 transform，在这一步中对 AST 进行添加、更新及移除等操作。
 
-![babel_work](/Users/liyang/Pictures/babel_work.webp)
+![babel_work](../images/babel_work.webp)
 
 插件的设计采用[访问者模式](https://github.com/ascoders/weekly/blob/master/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/189.%E7%B2%BE%E8%AF%BB%E3%80%8A%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%20-%20Visitor%20%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F%E3%80%8B.md)，由一个访问者（Visitor）来进行统一的遍历操作，提供节点的操作方法，响应式维护节点之间的关系；而插件（设计模式中称为“具体访问者”）只需要定义自己感兴趣的节点类型，当访问者访问到对应节点时，就调用插件的访问（visit）方法。这样的设计避免了多个插件自己去遍历AST，各自维护自己的状态，使整个系统变得难以理解和调试。
 
@@ -173,7 +173,7 @@ function say(name) {
 
 最后运行 node main.js 可以看到终端打印：
 
-![image-20240906113625210](/Users/liyang/Library/Application Support/typora-user-images/image-20240906113625210.png)
+![image-20240906113625210](../images/image-20240906113625210.png)
 
 符合预期，所以标识符都被反转了。
 
